@@ -2,6 +2,7 @@
 
 ###### minesweeper_cli
 a terminal based minesweeper that can be launched with node. It takes user input for tile selecting. see notes in game.js for how to run the project with node.
+
 *note: does not include logic for tile clearing -- plans for this in websweeper version*
 
 
