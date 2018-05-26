@@ -1,0 +1,15 @@
+body #board {
+  margin: auto;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  padding-left: 50px;
+  padding-right: 100px;
+}
+
+#sizeSelection .sizeSelectionText {
+  color: rgb(14, 48, 87);
+}
+
+#htmlform .form-items {
+  color: rgb(16, 27, 48);
+}
