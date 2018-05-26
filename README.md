@@ -12,11 +12,13 @@ The intention/goal is to create a 'minesweeper-like replica' that uses most of t
 
 My plan for moving it to a web version is to start by keeping it as simple as possible. 
 That may mean things like, for example:
-..* showing an "*" with a red tile for a bomb instead of finding or creating nice vector images.
+
+* showing an "*" with a red tile for a bomb instead of finding or creating nice vector images.
 
 Once it is all functional, I will go back and re-evaluate where things can be improved and features. This might also help keep the commits and code easy to follow in clear increments.
 
 Will update readme as needed, I just wanted to restate where this project is at.
 
 [heigh-ho](https://www.merriam-webster.com/dictionary/heigh-ho)
+
 *A word that is 75% "negative" and 25% "positive"?*
