@@ -2,8 +2,8 @@ export class Board {
   constructor(numberOfRows, numberOfColumns, numberOfBombs) {
     this._numberOfBombs = numberOfBombs;
     this._numberOfTiles = numberOfRows * numberOfColumns;
-  /*  Can Board be called without 'this' because it is inside it's own constructor? 
-      I did it because it works, but I'm not 100% sure why. yet. */
+  //  Can Board be called without 'this' because it is inside it's own constructor? 
+  //    I did it because it works, but I'm not 100% sure why. yet.
     this._playerBoard = Board.generatePlayerBoard(numberOfRows, numberOfColumns);
     this._bombBoard = Board.generateBombBoard(numberOfRows, numberOfColumns, numberOfBombs);
   }
