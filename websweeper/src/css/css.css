@@ -6,6 +6,39 @@ body #board {
   padding-right: 100px;
 }
 
+/* surround bombs number color - determined at board generation */
+body #board .bomb-num1 {
+  color: blue;
+}
+
+body #board .bomb-num2 {
+  color: green;
+}
+
+body #board .bomb-num3 {
+  color: red;
+}
+
+body #board .bomb-num4 {
+  color: purple;
+}
+
+body #board .bomb-num5 {
+  color: maroon;
+}
+
+body #board .bomb-num6 {
+  color: turquoise;
+}
+
+body #board .bomb-num7 {
+  color: black;
+}
+
+body #board .bomb-num8 {
+  color: gray;
+}
+
 #sizeSelection .sizeSelectionText {
   color: rgb(14, 48, 87);
 }
