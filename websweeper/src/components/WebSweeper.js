@@ -29,20 +29,7 @@ function receiveGameType() {
     newGame.testReplaceById(col5row6);
 }
 
-var gameSquares = document.getElementsByClassName("game-squares");
-// once game-squares exist, create event handlers for gameplay
-var checkExist = setInterval(function() {
-  if (gameSquares.length) {
-    console.log("Exists!");
-    // event listener for newly generated board
-    var boardSquares = document.getElementsByClassName("game-squares");
-    for ( let i = 0; i < boardSquares.length; i++ ) {
-      boardSquares[i].addEventListener("click", onPlayerClick, false);
-    }
-    console.log('Number of boardSquares= ' + boardSquares.length);
-    clearInterval(checkExist);
-  }
-}, 100);
+
 
 function onPlayerClick(e) {
   alert("game-square clicked");
@@ -51,6 +38,19 @@ function onPlayerClick(e) {
 class WebSweeper {
   constructor(gameType) {
     this._gameBoard = new MakeBoard(gameType);
+    this._gameSquares =  document.getElementsByClassName("game-squares");
+    this.initializeBoard();
+  }
+
+  initializeBoard() {
+      if (this._gameSquares.length) {
+        console.log("Exists!");
+        // event listener for newly generated board
+        for ( let i = 0; i < this._gameSquares.length; i++ ) {
+          this._gameSquares[i].addEventListener("click", onPlayerClick, false);
+        }
+        console.log('Number of boardSquares= ' + this._gameSquares.length);
+      }  
   }
 
   testReplaceById(colNumRowNum) {

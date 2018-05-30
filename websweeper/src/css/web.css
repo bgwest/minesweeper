@@ -6,6 +6,12 @@ body #board {
   padding-right: 100px;
 }
 
+#htmlform #small #med #large {
+  padding: 0.01em 16px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
 #homepage #startgame {
   width: 300px; 
   padding: 20px; 
