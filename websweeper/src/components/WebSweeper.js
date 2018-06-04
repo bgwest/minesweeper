@@ -1,61 +1,79 @@
 // "Game": 'WebSweeper',
 // "created by": 'benjamin g. west',
-// "when": 'may 2018',
+// "when": 'June 2018',
 // "message": 'project collaboration is invited :)'
 
-// express needed me to end file name with extension '.js'
-import MakeBoard from './MakeBoard.js';
-import playerClick from './GamePlay.js';
+// scriptName
+var scriptName = 'WebSweeper.js';
 
-var gameType = '';
-var htmlForm = document.getElementById("htmlform");
-htmlForm.addEventListener("submit", receiveGameType);
- 
-function receiveGameType() {
-    var formDiv = document.getElementById("sizeSelection");
-    for (let i = 0; i < htmlForm.length; i++) {
-     if (htmlForm[i].checked) {
-      gameType = htmlForm[i].value;
-      console.log(gameType);
-      console.log(submitsize.value);
-      formDiv.style.display = "none";
-      // note:
-      // instead of hiding the form, it could be changed to 
-      // generating a new UI menu with "pause, restart, etc"
-      // for sake of initial development, just hiding it for now
-     }
-    }
-    var newGame = new WebSweeper(gameType);
-    newGame.testReplaceById(col5row6);
+// named imports
+import { gameParams, submitButton } from './GetGameParameters.js';
+import { genGuiBaseBoard } from './MakeBaseBoard.js';
+import { genGuiPlaceBombs } from './SetBoard.js';
+import { playGame } from './Gameplay.js';
+
+// wait to create game board
+document.addEventListener('DOMContentLoaded', function() { 
+  waitForGameParams(); 
+});
+  
+function waitForGameParams() {
+  submitButton.addEventListener('submit', function() { 
+  checkForGameParams(); },
+false)};
+
+function checkForGameParams() {
+  if ( typeof gameParams.lastCol === 'undefined' ) {
+      console.log(`${scriptName} - gameParams.lastCol = ${gameParams.lastCol}`);
+      // if not found keep check again in a couple seconds
+      setTimeout(checkForGameParams, 2000);
+  } else {
+      console.log(`${scriptName} - ready - gameParams.lastCol = ${gameParams.lastCol}`);
+      makeGame();
+  }
 }
 
-
-
-function onPlayerClick(e) {
-  alert("game-square clicked");
+function makeGame() {
+  // if gameParams have been given let's make the game!
+  WebSweeper.MakeBaseBoard(gameParams.lastCol, gameParams.lastRow);
+  WebSweeper.AddListeners();
+  WebSweeper.SetBoard(gameParams.lastCol, gameParams.lastRow, gameParams.numOfBombs);
 }
 
+// Game Builder and click handler!
 class WebSweeper {
-  constructor(gameType) {
-    this._gameBoard = new MakeBoard(gameType);
-    this._gameSquares =  document.getElementsByClassName("game-squares");
-    this.initializeBoard();
+  constructor(lastCol, lastRow, numOfBombs) {
+      this._lastRow = lastRow;
+      this._lastCol = lastCol;
+      this._numOfBombs = numOfBombs;
+  }
+  
+  static MakeBaseBoard(x, y) {
+    console.log('called MakeBaseBoard');
+    genGuiBaseBoard(x, y);
   }
 
-  initializeBoard() {
-      if (this._gameSquares.length) {
-        console.log("Exists!");
-        // event listener for newly generated board
-        for ( let i = 0; i < this._gameSquares.length; i++ ) {
-          this._gameSquares[i].addEventListener("click", onPlayerClick, false);
-        }
-        console.log('Number of boardSquares= ' + this._gameSquares.length);
-      }  
+  static AddListeners() {
+    console.log('called AddListeners');
+    var gameSquares = document.getElementsByClassName("game-squares");
+    var textSquares = document.getElementsByClassName("text-squares");
+    // event listeners for newly generated board squares
+    for ( let i = 0; i < gameSquares.length; i++ ) {
+      gameSquares[i].addEventListener("click", function() { 
+        WebSweeper.GamePlay(gameSquares[i]) }, false);
+      textSquares[i].addEventListener("click", function() { 
+        WebSweeper.GamePlay(textSquares[i]) }, false);
+    }
+    //console.log('Number of boardSquares= ' + gameSquares.length);
   }
 
-  testReplaceById(colNumRowNum) {
-    // replace attribute
-    colNumRowNum.style.fill='black';
-  } 
+  static SetBoard(x, y, z) {
+    console.log('called SetBoard');
+    genGuiPlaceBombs(x, y, z);
+  }
+
+  static GamePlay(e) {
+    playGame(e, gameParams);
+  }
 
 }
