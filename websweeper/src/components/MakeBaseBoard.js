@@ -1,7 +1,7 @@
 // MakeBaseBoard.js
 
 // named export - genGuiBoard
-var genGuiBaseBoard = function(lastCol, lastRow) {
+var genGuiBaseBoard = function(lastRow, lastCol) {
   // make base elements and attributes
   var boardTiles = document.getElementById("board");
   var tile = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -28,9 +28,9 @@ var genGuiBaseBoard = function(lastCol, lastRow) {
       // rect
       var squareElem = document.createElementNS("http://www.w3.org/2000/svg", "rect");
       squareElem.setAttribute("class", "game-squares");
-      squareElem.setAttribute("data-colIndex", `${col}`)
       squareElem.setAttribute("data-rowIndex", `${row}`)
-      squareElem.setAttribute("id", `col${col}row${row}`);
+      squareElem.setAttribute("data-colIndex", `${col}`)
+      squareElem.setAttribute("id", `row${row}col${col}`);
       squareElem.setAttribute("width", `${width}px`);
       squareElem.setAttribute("height", `${height}px`);
       squareElem.setAttribute("x", `${xcord}`);
@@ -43,9 +43,9 @@ var genGuiBaseBoard = function(lastCol, lastRow) {
       // generate text elements with base style but wait to add Bombs
       var textElem = document.createElementNS("http://www.w3.org/2000/svg", "text");
       textElem.setAttribute("class", `text-squares`);
-      textElem.setAttribute("data-colIndex", `${col}`)
       textElem.setAttribute("data-rowIndex", `${row}`)
-      textElem.setAttribute("id", `text-id-col${col}row${row}`);
+      textElem.setAttribute("data-colIndex", `${col}`)
+      textElem.setAttribute("id", `text-id-row${row}col${col}`);
       textElem.setAttribute("x", `${textXcord}`);
       textElem.setAttribute("y", `${textYcord}`);
       textElem.setAttribute("font-size", "1.0em");

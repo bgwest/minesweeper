@@ -9,8 +9,8 @@ var scriptName = 'WebSweeper.js';
 // named imports
 import { gameParams, submitButton } from './GetGameParameters.js';
 import { genGuiBaseBoard } from './MakeBaseBoard.js';
-import { genGuiPlaceBombs } from './SetBoard.js';
-import { playGame } from './Gameplay.js';
+import { genGuiPlaceBombs, genGuiPlaceNumbers } from './SetBoard.js';
+import { playerClick } from './Gameplay.js';
 
 // wait to create game board
 document.addEventListener('DOMContentLoaded', function() { 
@@ -29,20 +29,31 @@ function checkForGameParams() {
       setTimeout(checkForGameParams, 2000);
   } else {
       console.log(`${scriptName} - ready - gameParams.lastCol = ${gameParams.lastCol}`);
+      // replace game selection form with a reset button for now
+      var resetButton = document.createElement("button");
+      resetButton.setAttribute("id","resetButton");
+      //resetButton.setAttribute("type","submit");
+      resetButton.setAttribute("onclick", "location.reload();");
+      resetButton.setAttribute("value","restart game");
+      resetButton.innerHTML = 'reset';
+      // for now, set reset button to refresh page... but eventually save data and offer
+      // after a page refresh
+      document.getElementsByClassName("sizeSelectionText")[0].style.display = 'none';
+      submitButton.parentNode.replaceChild(resetButton, submitButton);
       makeGame();
   }
 }
 
 function makeGame() {
   // if gameParams have been given let's make the game!
-  WebSweeper.MakeBaseBoard(gameParams.lastCol, gameParams.lastRow);
+  WebSweeper.MakeBaseBoard(gameParams.lastRow, gameParams.lastCol);
   WebSweeper.AddListeners();
-  WebSweeper.SetBoard(gameParams.lastCol, gameParams.lastRow, gameParams.numOfBombs);
+  WebSweeper.SetBoard(gameParams.lastRow, gameParams.lastCol, gameParams.numOfBombs);
 }
 
 // Game Builder and click handler!
 class WebSweeper {
-  constructor(lastCol, lastRow, numOfBombs) {
+  constructor(lastRow, lastCol, numOfBombs) {
       this._lastRow = lastRow;
       this._lastCol = lastCol;
       this._numOfBombs = numOfBombs;
@@ -70,10 +81,11 @@ class WebSweeper {
   static SetBoard(x, y, z) {
     console.log('called SetBoard');
     genGuiPlaceBombs(x, y, z);
+    genGuiPlaceNumbers(x, y);
   }
 
   static GamePlay(e) {
-    playGame(e, gameParams);
+    playerClick(e, gameParams);
   }
 
 }

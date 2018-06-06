@@ -39,7 +39,7 @@ function determineGameParams(value) {
   } else if ( value === 'Small' ) {
       gameParams.lastRow = 10;
       gameParams.lastCol = 10;
-      gameParams.numOfBombs = 10;
+      gameParams.numOfBombs = 12;
   }
   return gameParams;
 }
