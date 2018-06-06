@@ -2,10 +2,8 @@ export class Board {
   constructor(numberOfRows, numberOfColumns, numberOfBombs) {
     this._numberOfBombs = numberOfBombs;
     this._numberOfTiles = numberOfRows * numberOfColumns;
-  /* Note to self:
-      this is the first time I have seen a function being called from the same class it is within, 
-      without 'this' keyword. I assume it's because it is inside the constructor? 
-      A scope definition I may not know yet? */
+  //  Can Board be called without 'this' because it is inside it's own constructor? 
+  //    I did it because it works, but I'm not 100% sure why. yet.
     this._playerBoard = Board.generatePlayerBoard(numberOfRows, numberOfColumns);
     this._bombBoard = Board.generateBombBoard(numberOfRows, numberOfColumns, numberOfBombs);
   }

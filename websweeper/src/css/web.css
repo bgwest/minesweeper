@@ -1,0 +1,36 @@
+#Game {
+  text-align: center;
+  display: block;
+  margin: auto;
+}
+
+#board {
+  padding-top: 50px;
+  padding-bottom: 50px;
+  padding-left: 50px;
+  padding-right: 50px;
+
+}
+
+#resetButton {
+  width: 75px;
+  height: 30px;
+  border-color: grey;
+  border-radius: 20px;
+  border-color: gray;
+  box-shadow: 30px;
+  background-color: #ccffff;
+}
+
+.siteHeader {
+  text-align: center;
+}
+
+#sizeSelection .sizeSelectionText {
+  color: rgb(14, 48, 87);
+  text-align: relative;
+}
+
+#htmlform .form-items {
+  color: rgb(16, 27, 48);
+}
