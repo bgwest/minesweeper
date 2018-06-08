@@ -41,6 +41,7 @@ function determineGameParams(value) {
       gameParams.lastCol = 10;
       gameParams.numOfBombs = 12;
   }
+  gameParams.gameState = 'inplay';
   return gameParams;
 }
 

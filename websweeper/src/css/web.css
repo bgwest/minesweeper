@@ -1,36 +1,97 @@
+body {
+  font-family: 'Courier New';
+  min-height: 10em;
+  vertical-align: middle;
+  display: grid;
+}
+
 #Game {
-  text-align: center;
+  /*text-align: center;
   display: block;
-  margin: auto;
+  margin: auto;*/
+  float: left;
 }
 
 #board {
-  padding-top: 50px;
+  /*padding-top: 50px;*/
   padding-bottom: 50px;
   padding-left: 50px;
   padding-right: 50px;
-
+  position: inherit;
 }
 
 #resetButton {
-  width: 75px;
-  height: 30px;
+  font-family: 'Courier New';
+  color: #05202b7a;
+  width: 80px;
+  height: 80px;
   border-color: grey;
   border-radius: 20px;
   border-color: gray;
   box-shadow: 30px;
-  background-color: #ccffff;
+  background-color: #63e2b47a;
+  float: left;
+  margin: 10px;
+  position: inherit;
+}
+
+.gameover {
+  float: left;
+  width: 300px;
+  font-size: 60px;
+  text-align: center;
+  margin: auto;
+  /*color: #f9f9f9;*/
+  color: #ae60ff7a;
+  letter-spacing: -5px;
+  text-shadow: 0 1px 2px rgba(0,0,0,.15), 0 -1px 1px rgba(0,0,0,.1), 0 1px 20px #F9F9F9;
+}
+
+#sizeSelection {
+  margin-left: 50px;
+  font-size: 16px;
+  float: left;
+  position: inherit;
+}
+
+#submitSize {
+  font-family: 'Courier New';
+  color: #05202b7a;
+  width: 220px;
+  height: 60px;
+  border-color: grey;
+  border-radius: 20px;
+  /*border-color: gray;
+  border-color: #cfb4ff*/
+  border-color: #f6fff6;
+  box-shadow: 100px;
+  background-color: #e4f0ff;
 }
 
 .siteHeader {
+  float: left;
+  color: #0079ff78;
   text-align: center;
+  font-size: 50px;
 }
 
 #sizeSelection .sizeSelectionText {
-  color: rgb(14, 48, 87);
+  color: #5e6c7d;
   text-align: relative;
 }
 
 #htmlform .form-items {
   color: rgb(16, 27, 48);
+}
+
+#htmlform input[type=radio]:checked + .form-items .selectTxtSmall {
+  color: #2479d7;
+}
+
+#htmlform input[type=radio]:checked + .form-items .selectTxtMed {
+  color: #f1ad28;
+}
+
+#htmlform input[type=radio]:checked + .form-items .selectTxtLrg {
+  color: #ea2222;
 }

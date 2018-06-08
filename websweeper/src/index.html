@@ -29,9 +29,19 @@
           <text class="selectTxtLrg">Large - (Expert)</text>
         </span>
         <br><br>
-        <input id="submitSize" type="submit" value="Start game">
+        <input id="submitSize" onmouseover="changeColor('mouseOver');" onmouseout="changeColor('mouseOut');" type="submit" value="Start game">
+        <script>
+          function changeColor(motion) {
+            if ( motion === 'mouseOut') {
+              document.querySelector("#submitSize").style.borderColor = "#f6fff6";
+            } else if ( motion === 'mouseOver' ) {
+              document.querySelector("#submitSize").style.borderColor = "#4aff56";
+            }
+          };
+        </script>
       </form>
     </div>
+    <div id="gamestatus"></div>
     <div id="board">
     </div>
   </div>

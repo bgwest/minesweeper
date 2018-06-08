@@ -37,7 +37,7 @@ var genGuiBaseBoard = function(lastRow, lastCol) {
       squareElem.setAttribute("y", `${ycord}`);
       squareElem.setAttribute("stroke", "black");
       squareElem.setAttribute("stroke-opacity", "0.8");
-      squareElem.setAttribute("fill", "grey");
+      squareElem.setAttribute("fill", "#b1bcce");
       squareElem.setAttribute("fill-opacity", "0.5");    
       tile.appendChild(squareElem);
       // generate text elements with base style but wait to add Bombs

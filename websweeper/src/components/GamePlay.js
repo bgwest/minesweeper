@@ -1,19 +1,5 @@
 // Gameplay.js
 
-var squareDecoration = {
-    "bomb": { "color": 'red', "text": '*'},
-    // 'official colors'
-    0: { "color": 'white'},
-    1: { "color": 'blue' },
-    2: { "color": 'green' },
-    3: { "color": 'red' },
-    4: { "color": 'purple' },
-    5: { "color": 'maroon' },
-    6: { "color": 'turquoise' },
-    7: { "color": 'black' },
-    8: { "color": 'gray'}
-}
-
 function convertEventData(square) {
   // in order for a square to be click in any point, I needed to
   // put the e.listener on both the text and game square
@@ -36,7 +22,6 @@ function convertEventData(square) {
   // convert squareRow/ColIndex from string to int
   squareRowIndex = parseInt(squareRowIndex, 10);
   squareColIndex = parseInt(squareColIndex, 10);
-  //console.log('squareColIndex= ' + squareColIndex + ', ' + 'squareRowIndex= ' + squareRowIndex);
   return { squareRowIndex, squareColIndex, gameSquareId, textSquareId };
 }
 
@@ -47,9 +32,7 @@ function checkingBlankNeighbors(gameParams,neighborArr,clearArr) {
   var neighborOffsets = [ [-1, -1], [-1, 0], [-1, 1], [0, -1],/*,['0, 0'],*/ [0, 1], [1, -1], [1, 0], [1, 1] ];
   var lengthOfNeighborArr = neighborArr.length;
   // begin checking each position around the clicked square
-  //console.log('neighborArr up top of loop = ' + neighborArr);
   while ( lengthOfNeighborArr > 0 ) {
-    //for ( let i = 0; i < lengthOfNeighborArr; i++ ) {
       // get values from neighbor check array
       var squareRowIndex = document.getElementById(neighborArr[0]).getAttribute('data-rowIndex');
       var squareColIndex = document.getElementById(neighborArr[0]).getAttribute('data-colIndex');
@@ -62,28 +45,20 @@ function checkingBlankNeighbors(gameParams,neighborArr,clearArr) {
          // ... if ( the tile is valid aka not null / off the board ) ...
         if (neighborRowIndex >= 0 && neighborRowIndex < gameParams.lastRow && neighborColIndex >= 0 && neighborColIndex < gameParams.lastCol) {
           var neighborSquare = document.getElementById(`text-id-row${neighborRowIndex}col${neighborColIndex}`);
-          //console.log('checking neighborSquare:');
-          //console.log(neighborSquare);
           if ( neighborSquare.innerHTML === '#' ) {
             if ( clearArr.includes(neighborSquare.id) ) {
                 // max adding attemps should be: corner square = 3, edge square = 5, 'mid square' = 8;
-                //console.log(`${neighborSquare.id} already exists... skipping ${neighborSquare.id}`);
               } else {
                   neighborArr.push(neighborSquare.id);
                   clearArr.push(neighborSquare.id);
               }
 
           }
-          
-
-    
         }
-      
       });
       // remove position 0 and continue to next 0 position if not empty
       neighborArr.splice(0, 1, );
       lengthOfNeighborArr = neighborArr.length;
-    //}
   }
   return clearArr;
 }
@@ -96,10 +71,8 @@ function checkingNumberedNeighbors(gameParams,neighborArr,clearArr,cleanBlankSqu
   neighborArr = cleanBlankSquares;
   var lengthOfNeighborArr = neighborArr.length;
   clearArr = [];
-  // begin checking each position around the clicked square
-  //console.log('neighborArr up top of loop = ' + neighborArr);
+  // begin checking each position around the fed blank squares
   while ( lengthOfNeighborArr > 0 ) {
-    //for ( let i = 0; i < lengthOfNeighborArr; i++ ) {
       // get values from neighbor check array
       var squareRowIndex = document.getElementById(neighborArr[0]).getAttribute('data-rowIndex');
       var squareColIndex = document.getElementById(neighborArr[0]).getAttribute('data-colIndex');
@@ -112,8 +85,7 @@ function checkingNumberedNeighbors(gameParams,neighborArr,clearArr,cleanBlankSqu
          // ... if ( the tile is valid aka not null / off the board ) ...
         if (neighborRowIndex >= 0 && neighborRowIndex < gameParams.lastRow && neighborColIndex >= 0 && neighborColIndex < gameParams.lastCol) {
           var neighborSquare = document.getElementById(`text-id-row${neighborRowIndex}col${neighborColIndex}`);
-          //console.log('checking neighborSquare:');
-          //console.log(neighborSquare);
+
           switch (neighborSquare.innerHTML) {
             case '1':
             case '2':
@@ -125,21 +97,17 @@ function checkingNumberedNeighbors(gameParams,neighborArr,clearArr,cleanBlankSqu
             case '8':
                  if ( clearArr.includes(neighborSquare.id) ) {
                      // max adding attemps should be: corner square = 3, edge square = 5, 'mid square' = 8;
-                     //console.log(`${neighborSquare.id} already exists... skipping ${neighborSquare.id}`);
                    } else {
-                       //neighborArr.push(neighborSquare.id);
                        clearArr.push(neighborSquare.id);
                    }
             default:
                 //console.log(`${neighborSquare.id} is not a numbered square.`);
           }    
         }
-      
       });
       // remove position 0 and continue to next 0 position if not empty
       neighborArr.splice(0, 1, );
       lengthOfNeighborArr = neighborArr.length;
-    //}
   }
   return clearArr;
 }
@@ -156,11 +124,8 @@ function findAndClearBlankSquares(textSquareId,squareRowIndex,squareColIndex,gam
   // because a blank square ['#'] was clicked, add it first to be cleared
   clearArr.push(neighborArr[0]);
   var cleanBlankSquares = checkingBlankNeighbors(gameParams,neighborArr,clearArr);
-  //console.log('cleanBlankSquares = ' + cleanBlankSquares);
   cleanBlankSquares.forEach(queuedSquare => {
     var textSquare = document.getElementById(queuedSquare);
-    //console.log('adjusting queuedSquare:');
-    //console.log(queuedSquare);
     textSquare.setAttribute("fill-opacity", "1.0");
     textSquare.innerHTML = '';
     var splitTextId = textSquare.id.split("-", 3);
@@ -171,23 +136,14 @@ function findAndClearBlankSquares(textSquareId,squareRowIndex,squareColIndex,gam
 
   // now clearArry must be checked for neighboring numbers. 
   var cleanNumberedSquares = checkingNumberedNeighbors(gameParams,neighborArr,clearArr,cleanBlankSquares);
-  //console.log('cleanNumberedSquares = ' + cleanNumberedSquares);
   cleanNumberedSquares.forEach(queuedSquare => {
     var textSquare = document.getElementById(queuedSquare);
-    //console.log('adjusting queuedSquare:');
-    //console.log(queuedSquare);
     textSquare.setAttribute("fill-opacity", "1.0");
     var splitTextId = textSquare.id.split("-", 3);
     splitTextId = splitTextId[2];
     var gameSquare = document.getElementById(`${splitTextId}`);
     gameSquare.setAttribute("fill-opacity", "0.0");
   });
-}
-
-function findAndClearTouchingNumbers() {
-  // take in the created neighborArray containing all the blank square elements.
-  // check surrounding positions for numbered squares and if found, clear them.
-  
 }
 
 // named export - Gameplay.js
@@ -199,24 +155,31 @@ var playerClick = function (e, gameParams) {
   var textSquareId = clickEventData.textSquareId;
   var squareRowIndex = clickEventData.squareRowIndex;
   var squareColIndex = clickEventData.squareColIndex;
-  
   // Game play conditions & actions
   var textSquareInnerHtml = textSquareId.innerHTML;
   // If a square has already been cleared -- save the CPU and do nothing
   var gameSquareFillOpacity = gameSquareId.getAttribute("fill-opacity");
-  //console.log('gameSquareFillOpacity = ' + gameSquareFillOpacity);
   if ( gameSquareFillOpacity !== "0.0" ) {
     if ( textSquareInnerHtml === "#" ) {
       // get initial neighbor squares
-      var neighborObject = findAndClearBlankSquares(textSquareId.id, squareRowIndex,squareColIndex,gameParams);
+      findAndClearBlankSquares(textSquareId.id, squareRowIndex,squareColIndex,gameParams);
+      return gameParams.gameState = 'inplay';
     } else if ( textSquareInnerHtml === "*" ) {
-        gameSquareId.setAttribute("fill-opacity", "0.0");
+        gameSquareId.setAttribute("fill-opacity", "1.0");
+        gameSquareId.setAttribute("fill", "black");
         textSquareId.setAttribute("fill-opacity", "1.0");
-        console.log('Game over.');
+        var gamestatusDiv = document.getElementById("gamestatus");
+        var newHeader = document.createElement("h1");
+        newHeader.setAttribute("class", "gameover");
+        newHeader.innerHTML = 'GAME OVER'
+        gamestatusDiv.appendChild(newHeader);
+        //gamestatusDiv.innerHTML = 'GAME OVER';
+        return gameParams.gameState = 'gameover';
       } else {
           // if square is a number just reveal number and no square clearing...
           gameSquareId.setAttribute("fill-opacity", "0.0");
           textSquareId.setAttribute("fill-opacity", "1.0");
+          return gameParams.gameState = 'inplay';
         }
   } else {
       console.log('Square no more.');

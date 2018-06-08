@@ -85,7 +85,11 @@ class WebSweeper {
   }
 
   static GamePlay(e) {
-    playerClick(e, gameParams);
+    if (gameParams.gameState === "inplay") {
+      gameParams.gameState = playerClick(e, gameParams);
+    } else {
+        alert('Click reset to play a new game.');
+    }
   }
 
 }
