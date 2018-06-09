@@ -173,7 +173,10 @@ var playerClick = function (e, gameParams) {
         newHeader.setAttribute("class", "gameover");
         newHeader.innerHTML = 'GAME OVER'
         gamestatusDiv.appendChild(newHeader);
-        //gamestatusDiv.innerHTML = 'GAME OVER';
+        document.querySelector(".gameover").style.position = 'fixed';
+        document.getElementById("board").scrollIntoView({behavior: "smooth", block: "start"});
+        var browsBody = document.getElementById("browserBody");
+        browsBody.setAttribute("style", "zoom: 110%;");
         return gameParams.gameState = 'gameover';
       } else {
           // if square is a number just reveal number and no square clearing...
@@ -183,6 +186,7 @@ var playerClick = function (e, gameParams) {
         }
   } else {
       console.log('Square no more.');
+      return gameParams.gameState = 'inplay';
   }
 }
 

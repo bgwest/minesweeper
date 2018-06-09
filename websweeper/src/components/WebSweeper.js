@@ -34,6 +34,8 @@ function checkForGameParams() {
       resetButton.setAttribute("id","resetButton");
       //resetButton.setAttribute("type","submit");
       resetButton.setAttribute("onclick", "location.reload();");
+      resetButton.setAttribute("onmouseover", "this.style.borderWidth='3px'");
+      resetButton.setAttribute("onmouseout", "this.style.borderWidth='1px'");
       resetButton.setAttribute("value","restart game");
       resetButton.innerHTML = 'reset';
       // for now, set reset button to refresh page... but eventually save data and offer

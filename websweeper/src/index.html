@@ -4,11 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="/css/web.css">
+    <link rel="preload" href="/css/web.css" as="style">
+    <link id="websweepStyle" rel="stylesheet" type="text/css" href="/css/web.css">
+    <script>
+      function handleLayout() {
+        var styleSheet = document.getElementById("websweepStyle");
+        if (window.innerWidth <= 600 ) {
+          // largest phone screen currently is maybe 500px
+          styleSheet.setAttribute("href", "/css/webmobile.css");
+          console.log('loaded mobile css');
+        } else if ( window.innerWidth <= 850 ) {
+          // ipad is 768px*
+          styleSheet.setAttribute("href", "/css/webtablet.css");
+          console.log('loaded tablet css');
+        } else if ( window.innerWidth > 850 ) {
+          // iPad Pro is 1024px*
+          styleSheet.setAttribute("href", "/css/web.css");
+          console.log('loaded web css');
+        }
+      }
+      // runs before any markup is written to DOM...
+      window.onresize = handleLayout;
+      handleLayout();
+    </script>
     <title>Websweeper</title>
-    <h1 class="siteHeader">Websweeper.js</h1>
+    <h1 class="siteHeader" title="Websweeper.js" onmouseover="this.style.fontSize='61px'" onmouseout="this.style.fontSize='60px'"><a href='/index.html'>Websweeper.js</a></h1>
 </head>
-<body>
+<body id="browserBody" style="zoom: 100%;">
   <div id="Game">
     <div id="sizeSelection">
       <!-- Uncomment main.js for old functionality. Currently revamping WebSweeper.js  -->
@@ -18,7 +40,7 @@
       <form id="htmlform" onsubmit="return false;">
         <input id="small" type="radio" name="size" value="Small" checked>
         <span class="form-items">
-          <text class="selectTxtSmall">Small - (Best for beginner or a quick game)</text>
+          <text class="selectTxtSmall">Small - (New players or speed games)</text>
         </span><br>
         <input id="med" type="radio" name="size" value="Medium">
         <span class="form-items">
@@ -35,7 +57,8 @@
             if ( motion === 'mouseOut') {
               document.querySelector("#submitSize").style.borderColor = "#f6fff6";
             } else if ( motion === 'mouseOver' ) {
-              document.querySelector("#submitSize").style.borderColor = "#4aff56";
+              document.querySelector("#submitSize").style.borderColor = "#2c549ad4";
+              document.querySelector("#submitSize").style.borderWidth = "2px";
             }
           };
         </script>

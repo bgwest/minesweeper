@@ -32,6 +32,12 @@ function determineGameParams(value) {
       gameParams.lastRow = 16;
       gameParams.lastCol = 32;
       gameParams.numOfBombs = 99;
+      var sheetType = document.getElementById("websweepStyle").getAttribute("href");
+      if ( sheetType === '/css/webmobile.css' ) {
+        // helps support mobile without need for lots of manual pinch-zooming
+        gameParams.lastCol = 16;
+        gameParams.lastRow = 32;
+      }
   } else if ( value === 'Medium' ) {
       gameParams.lastRow = 16;
       gameParams.lastCol = 16;

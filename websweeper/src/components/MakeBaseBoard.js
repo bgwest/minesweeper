@@ -18,8 +18,8 @@ var genGuiBaseBoard = function(lastRow, lastCol) {
   var textXcord = 6;
   var textYcord = 15;
   // board
-  tile.setAttribute("width", "1000");
-  tile.setAttribute("height", "1000");
+  tile.setAttribute("width", "650");
+  tile.setAttribute("height", "650");
   boardTiles.appendChild(tile);
   // row
   for (row = 0; row < lastRow; row++) {
@@ -36,7 +36,8 @@ var genGuiBaseBoard = function(lastRow, lastCol) {
       squareElem.setAttribute("x", `${xcord}`);
       squareElem.setAttribute("y", `${ycord}`);
       squareElem.setAttribute("stroke", "black");
-      squareElem.setAttribute("stroke-opacity", "0.8");
+      squareElem.setAttribute("stroke-width", "1");
+      squareElem.setAttribute("stroke-opacity", "0.7");
       squareElem.setAttribute("fill", "#b1bcce");
       squareElem.setAttribute("fill-opacity", "0.5");    
       tile.appendChild(squareElem);
