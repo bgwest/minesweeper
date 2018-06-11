@@ -1,7 +1,7 @@
 // MakeBaseBoard.js
 
 // named export - genGuiBoard
-var genGuiBaseBoard = function(lastRow, lastCol) {
+var genGuiBaseBoard = function(lastRow, lastCol, gameBoardWidth, gameBoardHeight) {
   // make base elements and attributes
   var boardTiles = document.getElementById("board");
   var tile = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -18,8 +18,11 @@ var genGuiBaseBoard = function(lastRow, lastCol) {
   var textXcord = 6;
   var textYcord = 15;
   // board
-  tile.setAttribute("width", "650");
-  tile.setAttribute("height", "650");
+  tile.setAttribute("width", `${gameBoardWidth}`);
+  tile.setAttribute("height", `${gameBoardHeight}`);
+
+
+  tile.setAttribute("id", "gameBoard");
   boardTiles.appendChild(tile);
   // row
   for (row = 0; row < lastRow; row++) {

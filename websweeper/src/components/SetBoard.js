@@ -1,5 +1,17 @@
 // SetBoard.js
 
+var gameTimer = document.getElementById("gameTimer");
+var timerText = document.getElementById("timerText");
+var numberOfLegalSquares = 0;
+var playerTimer;
+var seconds = 0;
+var minutes = 0;
+var hours = 0; 
+
+var neighborOffsets = [
+  [-1, -1], [-1, 0], [-1, 1], [0, -1],/*,['0, 0'],*/ [0, 1], [1, -1], [1, 0], [1, 1],
+];
+
 var squareDecoration = {
   "bomb": { "color": 'red', "text": '*'},
   // 'official colors'
@@ -17,16 +29,19 @@ var squareDecoration = {
 // named export - genGuiPlaceBombs
 var genGuiPlaceBombs = function (lastRow, lastCol, numOfBombs) {
   let numberOfBombsPlaced = 0;
+  console.log('numOfBombs to be placed = ' + numOfBombs);
   while ( numberOfBombsPlaced < numOfBombs ) {
     var randomRow = Math.floor(Math.random() * lastRow);
     var randomCol = Math.floor(Math.random() * lastCol);
     var randomGameSquare = document.getElementById(`text-id-row${randomRow}col${randomCol}`);
-    randomGameSquare.setAttribute("fill", `${squareDecoration.bomb.color}`);
-    // place text bombs
-    randomGameSquare.innerHTML = `${squareDecoration.bomb.text}`;
-    numberOfBombsPlaced++;
+    // avoid placing on squares that are already bombs, throws off the bomb count
+    if ( randomGameSquare.innerHTML !== '*' ) {
+       // place text bombs
+      randomGameSquare.setAttribute("fill", `${squareDecoration.bomb.color}`);
+      randomGameSquare.innerHTML = `${squareDecoration.bomb.text}`;
+      numberOfBombsPlaced++;
+    } 
   }
-  console.log('Total bombs placed: ' + numberOfBombsPlaced);
 }
 
 // named export - genGuiPlaceNumbers
@@ -41,9 +56,6 @@ var genGuiPlaceNumbers = function (lastRow, lastCol) {
   var textSquares = document.getElementsByClassName("text-squares");
   for ( i = 0; i < textSquares.length; i++ ) {
     var numberOfBombs = 0;
-    var neighborOffsets = [
-      [-1, -1], [-1, 0], [-1, 1], [0, -1],/*,['0, 0'],*/ [0, 1], [1, -1], [1, 0], [1, 1],
-    ];
     //console.log('i= ' + i);
     var squareRowIndex = textSquares[i].getAttribute('data-rowIndex');
     var squareColIndex = textSquares[i].getAttribute('data-colIndex');
@@ -87,4 +99,95 @@ var genGuiPlaceNumbers = function (lastRow, lastCol) {
   }
 }
 
-export { genGuiPlaceBombs, genGuiPlaceNumbers };
+var genGuiPlayerHUD = function(submitButton) {
+
+  function genGuiPlaceGameReset(submitButton) {
+    // replace game selection form with a reset button for now
+    var resetButton = document.createElement("button");
+    resetButton.setAttribute("id","resetButton");
+     // for now, reset button will refresh page but not remove gamedata
+    resetButton.setAttribute("onclick", "location.reload();");
+    resetButton.setAttribute("onmouseover", "this.style.borderWidth='3px'");
+    resetButton.setAttribute("onmouseout", "this.style.borderWidth='1px'");
+    resetButton.setAttribute("value","restart game");
+    resetButton.innerHTML = 'reset';
+    document.getElementsByClassName("sizeSelectionText")[0].style.display = 'none';
+    // submitButton = htmlfrom -- so this replaces the entire intro form
+    submitButton.parentNode.replaceChild(resetButton, submitButton);
+  }
+  
+  function genGuiPlaceTimer() {
+    timerText.innerHTML = `${hours}:${minutes}:${seconds}`;
+  }
+
+  genGuiPlaceGameReset(submitButton);
+  genGuiPlaceTimer();
+  timerOperations('on');
+}
+
+var getNumberOfLegalSquares = function() {
+  var textSquares = document.getElementsByClassName('text-squares');
+  for ( let i = 0; i !== textSquares.length; i++ ) {
+    if ( textSquares[i].innerHTML !== "*" ) {
+      numberOfLegalSquares+=1;
+    }
+  }
+  console.log('numberOfLegalSquares = ' + numberOfLegalSquares);
+  return numberOfLegalSquares;
+}
+
+var genGuiLegalSquaresRemaining = function() {
+  var textSquares = document.getElementsByClassName('text-squares');
+  var legalSquaresRemainingVal = 0;
+  var uncoveredSquares = 0;
+  for ( let i = 0; i < textSquares.length; i++ ) {
+    if ( textSquares[i].innerHTML !== "*" && textSquares[i].getAttribute('fill-opacity') === '1.0' ) {
+      uncoveredSquares+=1;
+    }
+  }
+  legalSquaresRemainingVal = numberOfLegalSquares - uncoveredSquares;
+  //console.log('legalSquares = ' + legalSquaresRemainingVal + ', numberOfBombsPlaced = ' + numberOfBombsPlaced);
+  return legalSquaresRemainingVal;
+}
+
+var timerOperations = function(toggle) {
+  
+  var timerToggle = toggle;
+  
+  function startTimer() {
+    seconds+= 1;
+    if (seconds === 60 ){
+      seconds = 0;
+      minutes+= 1;
+    }
+    if (minutes === 60) {
+      minutes = 0;
+      hours+=1;
+    }
+    timerText.innerHTML = `${hours}:${minutes}:${seconds}`;
+  }
+  
+  if ( timerToggle === 'on' ) {
+    document.getElementsByClassName("timerElements")[0].style.display = 'grid';
+    playerTimer = setInterval(function() {
+      startTimer();
+    }, 1000);
+    return playerTimer;
+  }
+
+  if ( timerToggle === 'off' ) {
+    //console.log('timerToggle = ' + timerToggle);
+    clearInterval(playerTimer);
+  }
+
+}
+
+var refreshLeaderBoard = function() {
+  // check leaderBoard array if there is any new data to update
+  // only update the best 5 games a player has played
+  // game times are added to an array, fastest time first
+
+    //<div class="playedGame">Game 1</div><div class="playedResult">empty</div>
+}
+
+export { genGuiPlaceBombs, genGuiPlaceNumbers, genGuiPlayerHUD, timerOperations, refreshLeaderBoard, getNumberOfLegalSquares, genGuiLegalSquaresRemaining };

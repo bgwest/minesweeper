@@ -1,11 +1,14 @@
 // Gameplay.js
 
+// named imports
+import { timerOperations, refreshLeaderBoard, genGuiLegalSquaresRemaining } from './SetBoard.js';
+
 function convertEventData(square) {
   // in order for a square to be click in any point, I needed to
   // put the e.listener on both the text and game square
   // the section determines what event listener I am working with
   if (square.startsWith("text")) {
-    console.log('text clicked - ' + square);
+    //console.log('text clicked - ' + square);
     var textSquareId = document.getElementById(`${square}`);
     var squareRowIndex = textSquareId.getAttribute('data-rowIndex');
     var squareColIndex = textSquareId.getAttribute('data-colIndex');
@@ -13,7 +16,7 @@ function convertEventData(square) {
     splitTextId = splitTextId[2];
     var gameSquareId = document.getElementById(`${splitTextId}`);
   } else if ( square.startsWith("row") ) {
-    console.log('game clicked- ' + square);
+    //console.log('game clicked- ' + square);
     var gameSquareId = document.getElementById(`${square}`);
     var squareRowIndex = gameSquareId.getAttribute('data-rowIndex');
     var squareColIndex = gameSquareId.getAttribute('data-colIndex');
@@ -146,6 +149,35 @@ function findAndClearBlankSquares(textSquareId,squareRowIndex,squareColIndex,gam
   });
 }
 
+var gameStatus = '';
+function endGame(gameStatus, gameParams) {
+  // endGame on either Game over or Victory!
+  var newHeader = document.createElement("h1");
+  var endText = '';
+  newHeader.setAttribute("class", `${gameStatus}`);
+  if ( gameStatus === 'gameover' ) { 
+    endText = 'GAME OVER' 
+  } else if ( gameStatus === 'victory' ) { 
+      endText = 'VICTORY!!' 
+    }
+  newHeader.innerHTML = `${endText}`;
+  document.getElementById("gamestatus").appendChild(newHeader);
+  document.querySelector(`.${gameStatus}`).style.position = 'fixed';
+  document.getElementById("board").scrollIntoView({behavior: "smooth", block: "start"});
+  browsBody.setAttribute("style", "zoom: 110%;");
+  timerOperations('off');
+  var textSquares = document.getElementsByClassName('text-squares');
+  for ( let i = 0; i < textSquares.length; i++ ) {
+    if ( textSquares[i].innerHTML === '*' ) {
+      textSquares[i].setAttribute('fill-opacity', '1.0');
+      document.getElementsByClassName('game-squares')[i].setAttribute('fill', 'black');
+      document.getElementsByClassName('game-squares')[i].setAttribute('fill-opacity', '1.0');
+    }
+  }
+  return gameParams.gameState = gameStatus;
+}
+
+var browsBody = document.getElementById("browserBody");
 // named export - Gameplay.js
 var playerClick = function (e, gameParams) {
   var square = e.id;
@@ -163,26 +195,32 @@ var playerClick = function (e, gameParams) {
     if ( textSquareInnerHtml === "#" ) {
       // get initial neighbor squares
       findAndClearBlankSquares(textSquareId.id, squareRowIndex,squareColIndex,gameParams);
-      return gameParams.gameState = 'inplay';
+      var legalSquaresRemaining = genGuiLegalSquaresRemaining();
+      document.getElementById("legalSquaresLeft").innerHTML = `${legalSquaresRemaining}`;
+      if ( legalSquaresRemaining === 0 ) {
+        gameStatus = 'victory';
+        endGame(gameStatus, gameParams);
+      } else {
+        return gameParams.gameState = 'inplay';
+        }
     } else if ( textSquareInnerHtml === "*" ) {
         gameSquareId.setAttribute("fill-opacity", "1.0");
         gameSquareId.setAttribute("fill", "black");
         textSquareId.setAttribute("fill-opacity", "1.0");
-        var gamestatusDiv = document.getElementById("gamestatus");
-        var newHeader = document.createElement("h1");
-        newHeader.setAttribute("class", "gameover");
-        newHeader.innerHTML = 'GAME OVER'
-        gamestatusDiv.appendChild(newHeader);
-        document.querySelector(".gameover").style.position = 'fixed';
-        document.getElementById("board").scrollIntoView({behavior: "smooth", block: "start"});
-        var browsBody = document.getElementById("browserBody");
-        browsBody.setAttribute("style", "zoom: 110%;");
-        return gameParams.gameState = 'gameover';
+        gameStatus = 'gameover';
+        endGame(gameStatus, gameParams);
       } else {
           // if square is a number just reveal number and no square clearing...
           gameSquareId.setAttribute("fill-opacity", "0.0");
           textSquareId.setAttribute("fill-opacity", "1.0");
-          return gameParams.gameState = 'inplay';
+          var legalSquaresRemaining = genGuiLegalSquaresRemaining();
+          document.getElementById("legalSquaresLeft").innerHTML = `${legalSquaresRemaining}`;
+          if ( legalSquaresRemaining === 0 ) {
+            gameStatus = 'victory';
+            endGame(gameStatus, gameParams);
+          } else {
+            return gameParams.gameState = 'inplay';
+            }
         }
   } else {
       console.log('Square no more.');
