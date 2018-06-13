@@ -1,14 +1,15 @@
 // Gameplay.js
 
 // named imports
-import { timerOperations, refreshLeaderBoard, genGuiLegalSquaresRemaining } from './SetBoard.js';
+import { timerOperations,
+  genGuiLegalSquaresRemaining, 
+  ensureLeaderStatsObjIsAlive } from './SetBoard.js';
 
 function convertEventData(square) {
   // in order for a square to be click in any point, I needed to
   // put the e.listener on both the text and game square
   // the section determines what event listener I am working with
   if (square.startsWith("text")) {
-    //console.log('text clicked - ' + square);
     var textSquareId = document.getElementById(`${square}`);
     var squareRowIndex = textSquareId.getAttribute('data-rowIndex');
     var squareColIndex = textSquareId.getAttribute('data-colIndex');
@@ -16,7 +17,6 @@ function convertEventData(square) {
     splitTextId = splitTextId[2];
     var gameSquareId = document.getElementById(`${splitTextId}`);
   } else if ( square.startsWith("row") ) {
-    //console.log('game clicked- ' + square);
     var gameSquareId = document.getElementById(`${square}`);
     var squareRowIndex = gameSquareId.getAttribute('data-rowIndex');
     var squareColIndex = gameSquareId.getAttribute('data-colIndex');
@@ -149,23 +149,181 @@ function findAndClearBlankSquares(textSquareId,squareRowIndex,squareColIndex,gam
   });
 }
 
+function victoryLap(playerName, datePlayed, timeFinished) {
+  // records gameplay data and writes to local object to replace current localStorage object
+  var leaderStatsObject = ensureLeaderStatsObjIsAlive();
+  
+  function convertObjectPropertiesToNumbers(leaderStatsArrayObject) {
+    // a way to combine values for 1 sort comparison and split later
+  
+    for ( let i = 0; i < leaderStatsArrayObject.length; i++ ) {
+      var grabTimeFinished = leaderStatsArrayObject[i][2];
+      var splitValues = grabTimeFinished.split(':', 3);  
+      // first convert to numbers
+      var hours = parseInt(splitValues[0], 10);
+      var minutes = parseInt(splitValues[1], 10);
+      var seconds = parseInt(splitValues[2], 10);
+
+      var playerKey = leaderStatsArrayObject[i][0];
+      var dateKey = leaderStatsArrayObject[i][1];
+      if ( playerKey == 'TBD' || dateKey == 'TBD' ) {
+        hours = 0;
+        minutes = 1000;
+        seconds = 20;
+      }
+    
+      if ( seconds < 10 ) {
+          seconds = seconds / 100;
+          seconds = seconds.toString();
+          seconds = seconds.slice(2,4);
+      
+          if ( hours === 0 ) {
+            // don't do anything, will throw off value
+          } else if ( hours > 0 ) {
+              // converts hours to minutes and added those minutes to minutse variable
+              hours*=60;
+              minutes+=hours;
+          }
+          
+          minutes = minutes.toString();
+          
+          var finalValue = minutes + seconds;
+          // converts back to number with correct decimal placing for mins/secs
+          finalValue /= Math.pow(10, 2);
+  
+      } else {
+          seconds = parseInt(seconds, 10);
+          seconds = seconds.toString();
+          seconds = '.' + seconds;
+      
+          if ( hours === 0 ) {
+              // don't do anything, will throw off value
+          } else if ( hours > 0 ) {
+              // converts hours to minutes and added those minutes to minutse variable
+              hours*=60;
+              minutes+=hours;
+          }
+          
+          minutes = minutes.toString();
+          
+          var finalValue = minutes + seconds;
+          finalValue = parseFloat(finalValue, 10).toFixed(2);
+          finalValue = Number(finalValue);
+      }
+      // write newly created decimal value for sorting
+      leaderStatsArrayObject[i][2] = finalValue;
+      }
+      return leaderStatsArrayObject;
+  }
+
+  function writeBackToLocalStorage(leaderStatsObject) {
+    localStorage.setItem('leaderStatsObject', JSON.stringify(leaderStatsObject));
+  }
+  
+  function convertTimeBackToStringsAndExtendPlaceValues(leaderStatsObject) {
+    for ( let i = 0; i < leaderStatsObject.length; i++ ) {
+      var timeFinishedKey = leaderStatsArrayObject[i][2];
+      // extends 10's place to numbers ending 0 and converts back to string
+      timeFinishedKey = timeFinishedKey.toFixed(2);
+      timeFinishedKey = timeFinishedKey.split('.');
+      var finalWrite = `0:${timeFinishedKey[0]}:${timeFinishedKey[1]}`
+      leaderStatsArrayObject[i][2] = `${finalWrite}`;
+    }
+    
+    return leaderStatsObject;
+    
+  }
+  
+  function rankLeaderBoard(leaderStatsArrayObject) {
+    // rank the leaderBoard output so best games go on top
+    leaderStatsObject = convertObjectPropertiesToNumbers(leaderStatsArrayObject);
+    
+    leaderStatsObject = leaderStatsObject.sort(function(a,b) {
+      return a[2] - b[2];
+    });
+    
+    // after ranked, if leader board is full, take off last position
+    if ( leaderStatsArrayObject.length === 11 ) {
+      leaderStatsArrayObject.pop();
+    }
+
+    leaderStatsObject = convertTimeBackToStringsAndExtendPlaceValues(leaderStatsObject);
+    writeBackToLocalStorage(leaderStatsObject);
+
+    //console.log(leaderStatsObject);
+    console.log('leaderBoard ranked.');
+    
+  }
+  
+  var writeToPostion = 0;
+  var notBlank = 0;
+  // convert to obj array 
+  var leaderStatsArrayObject = Object.values(leaderStatsObject);
+  // 'game0' gets converted to just '0' -- note for later when converting back
+  for ( var i = 0; i < leaderStatsArrayObject.length; i++ ) {
+    var playerKey = leaderStatsArrayObject[i][0];
+    var dateKey = leaderStatsArrayObject[i][1];
+    if ( playerKey == 'TBD' || dateKey == 'TBD' ) {
+      // if places on leaderBoard are still blank, save in variable and write
+      // to leaderBoard array
+      writeToPostion = i;
+      break;
+    } else if ( playerKey !== 'TBD' || dateKey !== 'TBD' ) {
+        // if it's not blank, we don't want to write over without ranking
+        notBlank+=1;
+    }
+  }
+  
+  if ( notBlank === leaderStatsArrayObject.length ) {
+    // if no free spaces: push new value to array, rank, and then pop 
+    // last 'extra' position, then rank
+    console.log('not blank - needs to be pushed and popped');
+    console.log('length of array:');
+    var lastPositionOfArray = leaderStatsArrayObject.length;
+    leaderStatsArrayObject[lastPositionOfArray] = [];
+    leaderStatsArrayObject[lastPositionOfArray][0] = playerName;
+    leaderStatsArrayObject[lastPositionOfArray][1] = datePlayed;
+    leaderStatsArrayObject[lastPositionOfArray][2] = timeFinished;
+    rankLeaderBoard(leaderStatsArrayObject);
+  } else {
+    // else if blank position exists, write first then rank normally
+    console.log('\'blank position\' - free to write');
+    console.log('writeToPosition = ' + writeToPostion);
+    leaderStatsArrayObject[writeToPostion][0] = playerName;
+    leaderStatsArrayObject[writeToPostion][1] = datePlayed;
+    leaderStatsArrayObject[writeToPostion][2] = timeFinished;
+    // then finish by ranking leaderBoard
+    rankLeaderBoard(leaderStatsArrayObject);
+    // then update localStorage for future retrevial
+  }
+}
+
 var gameStatus = '';
 function endGame(gameStatus, gameParams) {
   // endGame on either Game over or Victory!
+  var timeFinished = timerOperations('off');
   var newHeader = document.createElement("h1");
   var endText = '';
   newHeader.setAttribute("class", `${gameStatus}`);
-  if ( gameStatus === 'gameover' ) { 
+  if ( gameStatus === 'gameover' ) {
     endText = 'GAME OVER' 
   } else if ( gameStatus === 'victory' ) { 
-      endText = 'VICTORY!!' 
+      endText = 'VICTORY!!'
+      // update leaderboard
+      var playerName = localStorage.getItem('playerName');
+      var datePlayed = localStorage.getItem('datePlayed');
+      // for consistency, just update single instance of timeFinished in local storage 
+      // but object will be updated too next in victoryLap...
+      localStorage.setItem('timeFinished', timeFinished);
+      timeFinished = localStorage.getItem('timeFinished');
+      victoryLap(playerName, datePlayed, timeFinished);
     }
   newHeader.innerHTML = `${endText}`;
   document.getElementById("gamestatus").appendChild(newHeader);
   document.querySelector(`.${gameStatus}`).style.position = 'fixed';
   document.getElementById("board").scrollIntoView({behavior: "smooth", block: "start"});
   browsBody.setAttribute("style", "zoom: 110%;");
-  timerOperations('off');
+
   var textSquares = document.getElementsByClassName('text-squares');
   for ( let i = 0; i < textSquares.length; i++ ) {
     if ( textSquares[i].innerHTML === '*' ) {

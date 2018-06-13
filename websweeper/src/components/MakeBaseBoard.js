@@ -21,7 +21,6 @@ var genGuiBaseBoard = function(lastRow, lastCol, gameBoardWidth, gameBoardHeight
   tile.setAttribute("width", `${gameBoardWidth}`);
   tile.setAttribute("height", `${gameBoardHeight}`);
 
-
   tile.setAttribute("id", "gameBoard");
   boardTiles.appendChild(tile);
   // row

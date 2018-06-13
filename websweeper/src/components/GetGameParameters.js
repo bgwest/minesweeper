@@ -1,7 +1,7 @@
 // GetGameParameters.js
 
-// scriptName
-var scriptName = 'GetGameParams.js';
+import { ensureLeaderStatsObjIsAlive } from './SetBoard.js';
+
 // submitButton = named export
 var submitButton = document.getElementById('htmlform');
 
@@ -13,12 +13,18 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function addFormListener() {
+  // first initialize localStorage handlers/data/leaderboard
   // use to set or get playerName default for homepage
   localStorage.getItem('playerName') || localStorage.setItem('playerName', 'HelloPlayer');
   document.getElementById('playerName').value = localStorage.getItem('playerName');
   localStorage.getItem('datePlayed') || localStorage.setItem('datePlayed', 'TBD');
   localStorage.getItem('timeFinished') || localStorage.setItem('timeFinished', 'TBD');
+  ensureLeaderStatsObjIsAlive();
+  getAndPlaceLeaders();
+  
+  // hide squaresLeft counter
   document.getElementById("legalSquaresLeft").style.display = 'none';
+
   // also required an anonymous function to prevent auto executing here...
   submitButton.addEventListener('submit', function() {
     for (let i = 0; i < submitButton.length; i++) {
@@ -27,6 +33,28 @@ function addFormListener() {
       }
     }
   },false)
+}
+
+// named export
+function getAndPlaceLeaders() {
+  // update, "render", leaderBoard
+  var getCurrentLeaders = JSON.parse(localStorage.getItem('leaderStatsObject'));
+  var gameElemIndex = 0;
+  if (getCurrentLeaders) {
+    getCurrentLeaders.forEach(leader => {
+      var leaderRowElem = document.getElementsByClassName('leaderRow')[gameElemIndex];
+      var textElemVar = document.createElement("text");
+      leaderRowElem.appendChild(textElemVar);
+      textElemVar.append(`${leader[0]}, ${leader[1]}, ${leader[2]}`);
+      // assume un-hide
+      leaderRowElem.style.display = 'block';
+      // hide if TBD values ... 
+      if ( leader[0] == "TBD" || leader[1] == "TBD" ) {
+        leaderRowElem.style.display = 'none';
+      }
+      gameElemIndex+=1;
+    });
+  }
 }
 
 // gameParams = named export
@@ -57,7 +85,9 @@ function determineGameParams(value) {
   } else if ( value === 'Small' ) {
       gameParams.lastRow = 10;
       gameParams.lastCol = 10;
-      gameParams.numOfBombs = 12;
+      //gameParams.numOfBombs = 12;
+      // for quick testing, delete when done testing
+      gameParams.numOfBombs = 3;
       gameParams.width = 206;
       gameParams.height = 206;
   }

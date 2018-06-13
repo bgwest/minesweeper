@@ -1,6 +1,5 @@
 // SetBoard.js
 
-var gameTimer = document.getElementById("gameTimer");
 var timerText = document.getElementById("timerText");
 var numberOfLegalSquares = 0;
 var playerTimer;
@@ -56,7 +55,6 @@ var genGuiPlaceNumbers = function (lastRow, lastCol) {
   var textSquares = document.getElementsByClassName("text-squares");
   for ( i = 0; i < textSquares.length; i++ ) {
     var numberOfBombs = 0;
-    //console.log('i= ' + i);
     var squareRowIndex = textSquares[i].getAttribute('data-rowIndex');
     var squareColIndex = textSquares[i].getAttribute('data-colIndex');
     // convert squareRow/ColIndex from string to int
@@ -75,13 +73,11 @@ var genGuiPlaceNumbers = function (lastRow, lastCol) {
           var neighborColumnIndex = squareColIndex + offset[1];
           if (neighborRowIndex >= 0 && neighborRowIndex < lastRow && neighborColumnIndex >= 0 && neighborColumnIndex < lastCol) {
             var checkingSquare = document.getElementById(`text-id-row${neighborRowIndex}col${neighborColumnIndex}`);
-            //console.log(`checking square...`);
-            //console.dir(checkingSquare);
+
             //checkingSquare = checkingSquare.innerHTML;
             // if the tile is valid aka not "off the board"
             if (checkingSquare.innerHTML === '*') {
               numberOfBombs++;
-              //console.log('numberOfBombs= ' + numberOfBombs);
              }
           }
         }
@@ -90,11 +86,8 @@ var genGuiPlaceNumbers = function (lastRow, lastCol) {
       var placeNumber = numberOfBombs;
       var placeColor = squareDecoration[placeNumber].color;
       if ( placeNumber >= 1 ) {
-      //gameSquareId.setAttribute("fill-opacity", "0.0");
       textSquares[i].innerHTML = `${placeNumber}`;
       textSquares[i].setAttribute("fill", `${placeColor}`)
-      // comment out after testing
-      //textSquares[i].setAttribute("fill-opacity", "1.0");
       }
   }
 }
@@ -125,6 +118,26 @@ var genGuiPlayerHUD = function(submitButton) {
   timerOperations('on');
 }
 
+var ensureLeaderStatsObjIsAlive = function() {
+  // pull current JSON from localsStorage and test
+  var leaderStatsObject = JSON.parse(localStorage.getItem('leaderStatsObject'));
+  if ( leaderStatsObject === null ) {
+    // if null, recreate and populate with base JSON structure
+    leaderStatsObject = {};
+    console.log('storage object found null ' + leaderStatsObject);
+    for ( let i = 0; i < document.getElementsByClassName("leaderRow").length; i++ ) {
+      leaderStatsObject[`game${i}`] = [ 'TBD','TBD', '10:0:0'];
+    }
+    // ensure that it's in an array format sending to localStorage as JSON
+    var sendLeaderStatsObject = Object.values(leaderStatsObject);
+    localStorage.setItem( 'leaderStatsObject', JSON.stringify( sendLeaderStatsObject ) );
+    //console.log(JSON.parse(localStorage.getItem('leaderStatsObject')));
+  } else {
+    console.log('leaderStatsObject has already been created.');
+  }
+  return leaderStatsObject;
+}
+
 var getNumberOfLegalSquares = function() {
   var textSquares = document.getElementsByClassName('text-squares');
   for ( let i = 0; i !== textSquares.length; i++ ) {
@@ -132,7 +145,6 @@ var getNumberOfLegalSquares = function() {
       numberOfLegalSquares+=1;
     }
   }
-  console.log('numberOfLegalSquares = ' + numberOfLegalSquares);
   return numberOfLegalSquares;
 }
 
@@ -146,7 +158,6 @@ var genGuiLegalSquaresRemaining = function() {
     }
   }
   legalSquaresRemainingVal = numberOfLegalSquares - uncoveredSquares;
-  //console.log('legalSquares = ' + legalSquaresRemainingVal + ', numberOfBombsPlaced = ' + numberOfBombsPlaced);
   return legalSquaresRemainingVal;
 }
 
@@ -177,17 +188,19 @@ var timerOperations = function(toggle) {
 
   if ( timerToggle === 'off' ) {
     //console.log('timerToggle = ' + timerToggle);
+    var timeFinished = `${hours}:${minutes}:${seconds}`;
     clearInterval(playerTimer);
+    return timeFinished;
   }
 
 }
 
-var refreshLeaderBoard = function() {
-  // check leaderBoard array if there is any new data to update
-  // only update the best 5 games a player has played
-  // game times are added to an array, fastest time first
-
-    //<div class="playedGame">Game 1</div><div class="playedResult">empty</div>
-}
-
-export { genGuiPlaceBombs, genGuiPlaceNumbers, genGuiPlayerHUD, timerOperations, refreshLeaderBoard, getNumberOfLegalSquares, genGuiLegalSquaresRemaining };
+export { 
+  genGuiPlaceBombs, 
+  genGuiPlaceNumbers, 
+  genGuiPlayerHUD, 
+  timerOperations, 
+  getNumberOfLegalSquares, 
+  genGuiLegalSquaresRemaining, 
+  ensureLeaderStatsObjIsAlive 
+};

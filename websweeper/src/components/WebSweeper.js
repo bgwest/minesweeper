@@ -9,7 +9,7 @@ var scriptName = 'WebSweeper.js';
 // named imports
 import { gameParams, submitButton } from './GetGameParameters.js';
 import { genGuiBaseBoard } from './MakeBaseBoard.js';
-import { genGuiPlaceBombs, genGuiPlaceNumbers, genGuiPlayerHUD, getNumberOfLegalSquares, genGuiLegalSquaresRemaining } from './SetBoard.js';
+import { genGuiPlaceBombs, genGuiPlaceNumbers, genGuiPlayerHUD, getNumberOfLegalSquares } from './SetBoard.js';
 import { playerClick } from './Gameplay.js';
 
 // wait to create game board
@@ -28,17 +28,17 @@ function checkForGameParams() {
       // if not found keep check again in a couple seconds
       setTimeout(checkForGameParams, 2000);
   } else {
-      //console.log(`${scriptName} - ready - gameParams.lastCol = ${gameParams.lastCol}`);
       genGuiPlayerHUD(submitButton);
       // store playerName in localStorage
       var playerNameVal = document.getElementById("playerName").value;
       localStorage.setItem("playerName", playerNameVal);
       document.getElementById("playerForm").style.display = 'none';
+
       // ensure a blank playerName was not used
       if ( /^\s+$/.test(playerNameVal) || playerNameVal === '' ) {
-        console.log('trying to set.');
         localStorage.setItem("playerName", 'DefaultPlayer');
       }
+
       var makeTime = new Date();
       var timeStarted = `${makeTime.getHours()}:${makeTime.getMinutes()}:${makeTime.getSeconds()}`;
       var datePlayed = `${makeTime.getMonth()}/${makeTime.getDate()}/${makeTime.getFullYear()}`;
@@ -52,6 +52,7 @@ function checkForGameParams() {
   }
 }
 
+
 function makeGame() {
   // if gameParams have been given let's make the game!
   WebSweeper.MakeBaseBoard(gameParams.lastRow, gameParams.lastCol, gameParams.width, gameParams.height);
@@ -62,6 +63,7 @@ function makeGame() {
     document.querySelector("#gameBoard").style.marginLeft = "120px";
     console.log(document.querySelector("#gameBoard").style.marginLeft);
   }
+  //ensureLeaderStatsObjIsAlive();
   getNumberOfLegalSquares();
 }
 

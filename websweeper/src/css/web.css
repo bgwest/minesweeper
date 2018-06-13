@@ -165,7 +165,7 @@ div#leaderBoard {
   border: 3px solid #dcdcdc;
   border-radius: 20px;
   float: left;
-  font-size: 17px;
+  font-size: 15px;
   /*text-align: center;
   vertical-align: middle;
   position: inherit;*/
@@ -175,19 +175,29 @@ div#leaderBoard {
 	position: relative;
 	display: block;
 	width: 100%;
-	height: 40px;
+	height: 35px;
   border-bottom: 1px solid #AFAFAF;
 }
 
-.leaderHeader {
-	position: relative;
-	width: 100%;
-  height: 40px;
+div.leaderHeader {
+  line-height: 35px;
+  margin: 0px;
+  margin-top: 10%;
+  position: relative;
   text-align: center;
   font-weight: bold;
-  margin-top: 4%;
   vertical-align: middle;
-  border-bottom: 1px solid #AFAFAF;
+  margin: 0px;
+	width: 100%;
+  height: 10%;
+}
+.leaderHeader text {
+  color: #0085ffde;
+  margin: 0px;
+}
+
+div#game9 {
+  border-bottom: 0px transparent !important;
 }
 
 #playerForm {
