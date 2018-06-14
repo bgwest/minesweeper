@@ -20,8 +20,8 @@ var genGuiBaseBoard = function(lastRow, lastCol, gameBoardWidth, gameBoardHeight
   // board
   tile.setAttribute("width", `${gameBoardWidth}`);
   tile.setAttribute("height", `${gameBoardHeight}`);
-
   tile.setAttribute("id", "gameBoard");
+
   boardTiles.appendChild(tile);
   // row
   for (row = 0; row < lastRow; row++) {

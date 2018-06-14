@@ -2,12 +2,12 @@
 
 import { ensureLeaderStatsObjIsAlive } from './SetBoard.js';
 
+var sheetType = document.getElementById("websweepStyle").getAttribute("href");
+
 // submitButton = named export
 var submitButton = document.getElementById('htmlform');
 
 // Page loading too quicky sometimes, so I created an event listener for DOMContentLoaded.
-// Also, the anonymous function() preceeding the addFormListener() seemed to also be required. 
-// ('DOMContentLoaded', addFormListener()) invoked immediately before I added function(){}.
 document.addEventListener('DOMContentLoaded', function() {
     addFormListener();
 });
@@ -45,7 +45,7 @@ function getAndPlaceLeaders() {
       var leaderRowElem = document.getElementsByClassName('leaderRow')[gameElemIndex];
       var textElemVar = document.createElement("text");
       leaderRowElem.appendChild(textElemVar);
-      textElemVar.append(`${leader[0]}, ${leader[1]}, ${leader[2]}`);
+      textElemVar.append(`${leader[0]}, ${leader[1]}, ${leader[2]}, ${leader[3]}`);
       // assume un-hide
       leaderRowElem.style.display = 'block';
       // hide if TBD values ... 
@@ -61,7 +61,7 @@ function getAndPlaceLeaders() {
 var gameParams = {};
 function determineGameParams(value) {
   // gameParams TBD below
-  var sheetType = document.getElementById("websweepStyle").getAttribute("href");
+  sheetType = document.getElementById("websweepStyle").getAttribute("href");
   gameParams = { size: value, lastRow: 0, lastCol: 0, numOfBombs: 0, width: 0, height: 0, 'sheetType': sheetType };
   if ( value === 'Large' ) {
       gameParams.lastRow = 16;
@@ -85,9 +85,7 @@ function determineGameParams(value) {
   } else if ( value === 'Small' ) {
       gameParams.lastRow = 10;
       gameParams.lastCol = 10;
-      //gameParams.numOfBombs = 12;
-      // for quick testing, delete when done testing
-      gameParams.numOfBombs = 3;
+      gameParams.numOfBombs = 12;
       gameParams.width = 206;
       gameParams.height = 206;
   }

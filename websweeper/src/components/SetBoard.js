@@ -74,7 +74,6 @@ var genGuiPlaceNumbers = function (lastRow, lastCol) {
           if (neighborRowIndex >= 0 && neighborRowIndex < lastRow && neighborColumnIndex >= 0 && neighborColumnIndex < lastCol) {
             var checkingSquare = document.getElementById(`text-id-row${neighborRowIndex}col${neighborColumnIndex}`);
 
-            //checkingSquare = checkingSquare.innerHTML;
             // if the tile is valid aka not "off the board"
             if (checkingSquare.innerHTML === '*') {
               numberOfBombs++;
@@ -100,8 +99,8 @@ var genGuiPlayerHUD = function(submitButton) {
     resetButton.setAttribute("id","resetButton");
      // for now, reset button will refresh page but not remove gamedata
     resetButton.setAttribute("onclick", "location.reload();");
-    resetButton.setAttribute("onmouseover", "this.style.borderWidth='3px'");
-    resetButton.setAttribute("onmouseout", "this.style.borderWidth='1px'");
+    resetButton.setAttribute("onmouseover", "this.style.borderWidth='2px'; this.style.borderColor='#2c549ad4';");
+    resetButton.setAttribute("onmouseout", "this.style.borderWidth='2px'; this.style.borderColor='#dcdcdc';");
     resetButton.setAttribute("value","restart game");
     resetButton.innerHTML = 'reset';
     document.getElementsByClassName("sizeSelectionText")[0].style.display = 'none';
@@ -126,15 +125,12 @@ var ensureLeaderStatsObjIsAlive = function() {
     leaderStatsObject = {};
     console.log('storage object found null ' + leaderStatsObject);
     for ( let i = 0; i < document.getElementsByClassName("leaderRow").length; i++ ) {
-      leaderStatsObject[`game${i}`] = [ 'TBD','TBD', '10:0:0'];
+      leaderStatsObject[`game${i}`] = [ 'TBD','TBD', '10:0:0', 'TBD'];
     }
     // ensure that it's in an array format sending to localStorage as JSON
     var sendLeaderStatsObject = Object.values(leaderStatsObject);
     localStorage.setItem( 'leaderStatsObject', JSON.stringify( sendLeaderStatsObject ) );
-    //console.log(JSON.parse(localStorage.getItem('leaderStatsObject')));
-  } else {
-    console.log('leaderStatsObject has already been created.');
-  }
+  } 
   return leaderStatsObject;
 }
 
@@ -187,7 +183,6 @@ var timerOperations = function(toggle) {
   }
 
   if ( timerToggle === 'off' ) {
-    //console.log('timerToggle = ' + timerToggle);
     var timeFinished = `${hours}:${minutes}:${seconds}`;
     clearInterval(playerTimer);
     return timeFinished;

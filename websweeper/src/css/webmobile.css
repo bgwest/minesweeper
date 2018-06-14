@@ -26,9 +26,6 @@ body {
 }
 
 #Game {
-  /*text-align: center;
-  display: block;
-  margin: auto;*/
   float: left;
 }
 
@@ -40,7 +37,7 @@ body {
 
 #gameBoard {
   float: left;
-  margin-left: 65px;
+  margin-left: 75px;
 }
 
 #resetButton {
@@ -50,12 +47,12 @@ body {
   width: 80px;
   height: 80px;
   border-radius: 20px;
-  border-color: #2c549ad4;
+  border: 2px solid #2c549ad4;
   /*background-color: #63e2b47a;*/
   float: left;
   margin-top: auto;
   margin-right: auto;
-  margin-left: auto;
+  margin-left: 20%;
   margin-bottom: 20px;
   position: inherit;
 }
@@ -64,13 +61,13 @@ body {
   color: #05202b7a;
   width: 80px;
   height: 80px;
-  border: 1px solid #73AD21;
+  border: 2px solid #73AD21;
   border-color: #2c549ad4;
   border-radius: 20px;
   float: left;
   margin-top: auto;
   margin-right: auto;
-  margin-left: 20px;
+  margin-left: 15px;
   margin-bottom: 20px;
   text-align: center;
   vertical-align: middle;
@@ -88,8 +85,8 @@ body {
   float: left;
   margin-top: auto;
   margin-right: auto;
-  margin-left: 20px;
-  margin-bottom: 20px;
+  margin-left: 30px;
+  margin-bottom: 10%;
   position: inherit;
 }
 
@@ -105,14 +102,22 @@ body {
 .gameover {
   float: left;
   width: 300px;
-  font-size: 60px;
+  font-size: 3em;
   text-align: center;
-  /*cmargin: auto;
-  color: #f9f9f9;*/
+  /*color: #f9f9f9;*/
   margin-top: 100px;
   color: #ae60ff7a;
   letter-spacing: -5px;
   text-shadow: 0 1px 2px rgba(0,0,0,.15), 0 -1px 1px rgba(0,0,0,.1), 0 1px 20px #F9F9F9;
+}
+
+h1.victory {
+  color: #00c168;
+  text-shadow: 0 5px 2px rgba(7, 101, 22, 0.39), 0 10px 50px rgb(75, 156, 255), 0 1px 1px #000000;
+  position: fixed;
+  margin-top: 100px;
+  text-align: center;
+  font-size: 3em;
 }
 
 #sizeSelection {
@@ -135,7 +140,7 @@ body {
   border-color: #cfb4ff*/
   border-color: #dcdcdc;
   box-shadow: 100px;
-  background-color: #e4f0ff;
+  background-color: #f7fbff;
 }
 
 .siteHeader {
@@ -147,7 +152,7 @@ body {
 
 .siteHeader a {
   text-decoration: none;
-  color: #0079ff78;
+  color: #0079ffbf;
 }
 
 .siteEdition {
@@ -156,36 +161,24 @@ body {
   color: #45596d78;
   margin: 0px;
   margin-top: 1px;
-  margin-bottom: 5%;
+  margin-bottom: 8%;
   /*font-size: 40px;*/
 }
 
 div#leaderBoard {
   margin: 0px;
   margin-left: 16%;
-  margin-top: 10%;
+  margin-top: 8%;
   margin-bottom: 10%;
 }
 
 #leaderBoard {
   color: #05202b7a;
-  width: 300px;
-  height: 400px;
-  border: 3px solid #dcdcdc;
+  width: 320px;
+  height: 500px;
+  border: 2px solid #dcdcdc;
   border-radius: 20px;
   float: left;
-  font-size: 15px;
-  /*text-align: center;
-  vertical-align: middle;
-  position: inherit;*/
-}
-
-.leaderRow {
-	position: relative;
-	display: block;
-	width: 100%;
-	height: 35px;
-  border-bottom: 1px solid #AFAFAF;
 }
 
 div.leaderHeader {
@@ -196,29 +189,54 @@ div.leaderHeader {
   text-align: center;
   font-weight: bold;
   vertical-align: middle;
+  font-size: 20px;
   margin: 0px;
 	width: 100%;
   height: 10%;
 }
 
 .leaderHeader text {
-  color: #0085ffde;
+  color: #0079ffcf;
   margin: 0px;
 }
 
-div#game9 {
+div.leaderRow {
+  padding-bottom: 10px;
+}
+
+.leaderRow {
+	position: relative;
+  display: block;
+  font-size: 15px;
+  margin-top: 10px;
+  margin-left: 5px;
+  text-align: left;
+	width: 95%;
+	height: 30px;
+  border-bottom: 1px solid #AFAFAF;
+}
+
+div#game7 {
   border-bottom: 0px transparent !important;
+}
+
+#playerFormTitle {
+  font-size: 22px;
+  color: #505c6b;
 }
 
 #playerForm {
   margin: 0px;
   margin-left: 10%;
-  color: #505c6b;
+  color: #00618dd4;
 }
 
 input#playerName {
   border-radius: 8px;
-  height: 20px;
+  font-size: 20px;
+  margin-top: 1%;
+  padding-left: 8px;
+  height: 42px;
   vertical-align: middle;
   border: 2px solid #dcdcdc;
   outline: none;
@@ -243,6 +261,7 @@ input#playerName {
 #sizeSelection .sizeSelectionText {
   color: #505c6b;
   text-align: relative;
+  margin-top: 8%;
   margin-bottom: 0px;
 }
 
@@ -251,7 +270,7 @@ input#playerName {
 }
 
 #htmlform input[type=radio]:checked + .form-items .selectTxtSmall {
-  color: #3fd724;
+  color: #89ec77;
 }
 
 #htmlform input[type=radio]:checked + .form-items .selectTxtMed {
@@ -272,10 +291,6 @@ div#datFooter {
   width: 95%;
   height: auto; 
   background: white;
-  /*margin-left: 3px;
-  margin-bottom: 10px;
-  margin-right: 0px;
-  margin-top: 120px;*/
   margin-top: 10%;
   color: black;
   border: 3px solid #dcdcdc;
@@ -296,6 +311,5 @@ div#datFooter {
 
 #footerLinks {
   margin: 0px;
-  /*margin-right: 10px;*/
   text-decoration: none;
 }

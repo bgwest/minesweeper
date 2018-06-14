@@ -149,7 +149,7 @@ function findAndClearBlankSquares(textSquareId,squareRowIndex,squareColIndex,gam
   });
 }
 
-function victoryLap(playerName, datePlayed, timeFinished) {
+function victoryLap(playerName, datePlayed, timeFinished, boardSize) {
   // records gameplay data and writes to local object to replace current localStorage object
   var leaderStatsObject = ensureLeaderStatsObjIsAlive();
   
@@ -243,7 +243,8 @@ function victoryLap(playerName, datePlayed, timeFinished) {
     });
     
     // after ranked, if leader board is full, take off last position
-    if ( leaderStatsArrayObject.length === 11 ) {
+    var leaderRowLengthPlusOne = document.getElementsByClassName('leaderRow').length + 1;
+    if ( leaderStatsArrayObject.length === leaderRowLengthPlusOne ) {
       leaderStatsArrayObject.pop();
     }
 
@@ -277,21 +278,21 @@ function victoryLap(playerName, datePlayed, timeFinished) {
   if ( notBlank === leaderStatsArrayObject.length ) {
     // if no free spaces: push new value to array, rank, and then pop 
     // last 'extra' position, then rank
-    console.log('not blank - needs to be pushed and popped');
-    console.log('length of array:');
     var lastPositionOfArray = leaderStatsArrayObject.length;
     leaderStatsArrayObject[lastPositionOfArray] = [];
     leaderStatsArrayObject[lastPositionOfArray][0] = playerName;
     leaderStatsArrayObject[lastPositionOfArray][1] = datePlayed;
     leaderStatsArrayObject[lastPositionOfArray][2] = timeFinished;
+    leaderStatsArrayObject[lastPositionOfArray][3] = boardSize;
+    
     rankLeaderBoard(leaderStatsArrayObject);
   } else {
     // else if blank position exists, write first then rank normally
-    console.log('\'blank position\' - free to write');
-    console.log('writeToPosition = ' + writeToPostion);
     leaderStatsArrayObject[writeToPostion][0] = playerName;
     leaderStatsArrayObject[writeToPostion][1] = datePlayed;
     leaderStatsArrayObject[writeToPostion][2] = timeFinished;
+    leaderStatsArrayObject[writeToPostion][3] = boardSize;
+
     // then finish by ranking leaderBoard
     rankLeaderBoard(leaderStatsArrayObject);
     // then update localStorage for future retrevial
@@ -312,11 +313,12 @@ function endGame(gameStatus, gameParams) {
       // update leaderboard
       var playerName = localStorage.getItem('playerName');
       var datePlayed = localStorage.getItem('datePlayed');
+      var boardSize = gameParams.size;
       // for consistency, just update single instance of timeFinished in local storage 
       // but object will be updated too next in victoryLap...
       localStorage.setItem('timeFinished', timeFinished);
       timeFinished = localStorage.getItem('timeFinished');
-      victoryLap(playerName, datePlayed, timeFinished);
+      victoryLap(playerName, datePlayed, timeFinished, boardSize);
     }
   newHeader.innerHTML = `${endText}`;
   document.getElementById("gamestatus").appendChild(newHeader);

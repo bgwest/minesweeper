@@ -4,19 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="preload" href="/css/web.css" as="style">
     <link id="websweepStyle" rel="stylesheet" type="text/css" href="/css/web.css">
     <script>
       function handleLayout() {
         var styleSheet = document.getElementById("websweepStyle");
-        if (window.innerWidth <= 600 ) {
+        if (window.innerWidth <= 500 ) {
           // largest phone screen currently is maybe 500px
           styleSheet.setAttribute("href", "/css/webmobile.css");
-          //console.log('loaded mobile css');
-        } else if ( window.innerWidth >= 850 ) {
+          console.log('loaded mobile css');
+        } else if ( window.innerWidth >= 501 ) {
           // iPad Pro is 1024px*
           styleSheet.setAttribute("href", "/css/web.css");
-          //console.log('loaded web css');
+          console.log('loaded web css');
         }
       }
       // runs before any markup is written to DOM...
@@ -34,21 +33,20 @@
           // only allow -, _, alpha, and numeric values for player name
           // search globally and case insensitive 
           if (!/^[a-z0-9\_\-]*$/gi.test(playerName.value)) {
-            alert(`${playerName.value} is an invalid player name. Please adjust before starting game.`);
+            alert(`\n${playerName.value} is an invalid player name.\nPlease adjust before starting game.`);
+            alert('\nAllowed:\nAll alpha and numeric characters.\n\nNot Allowed:\nspaces. The only special characters that are allowed are - _\n\n')
             playerName.focus();
-            playerName.value = 'Valid_player01-name';
+            playerName.value = '';
             return false;
           }
         }
     </script>
     <div id="board">
         <form id="playerForm" onmouseleave="testPlayerValue();">
-            <strong>Player Name:</strong><br>
-            <input id="playerName" type="text" name="playerName" onmouseover="changeColor('mouseOver','#playerName');" onmouseout="changeColor('mouseOut','#playerName');">
+            <text id="playerFormTitle"><strong>Player Name:</strong></text><br>
+            <input id="playerName" type="text" name="playerName" onfocus="this.value=''" onmouseover="changeColor('mouseOver','#playerName');" onmouseout="changeColor('mouseOut','#playerName');">
           </form>
           <div id="sizeSelection">
-            <!-- Uncomment main.js for old functionality. Currently revamping WebSweeper.js  -->
-            <!-- <script src="./main.js" type="module"></script> -->
             <script src="./components/WebSweeper.js" type="module"></script>
             <h3 class="sizeSelectionText">Select Your Board Size:</h3>
             <form id="htmlform" onsubmit="return false;">
@@ -92,7 +90,7 @@
           <div id="gamestatus"></div>
     </div>
     <div id="leaderBoard" title="After 'Victory!' please click reset to refresh leaderBoard :)" onmouseover="changeColor('mouseOver','#leaderBoard');" onmouseout="changeColor('mouseOut','#leaderBoard');">
-      <div class="leaderHeader"><text>Leaderboard</text></div>
+      <div class="leaderHeader"><h1><text class="leaderHeaderText">Leaderboard</text></h1></div>
       <div class="leaderRow" id="game0"></div>
       <div class="leaderRow" id="game1"></div>
       <div class="leaderRow" id="game2"></div>
@@ -100,9 +98,7 @@
       <div class="leaderRow" id="game4"></div>
       <div class="leaderRow" id="game5"></div>
       <div class="leaderRow" id="game6"></div>
-      <div class="leaderRow" id="game7"></div>
-      <div class="leaderRow" id="game8"></div>
-      <div class="leaderRow" id="game9" class="lastLeaderRow"></div>
+      <div class="leaderRow" id="game7" class="lastLeaderRow"></div>
     </div>
   </div>
 </body>
