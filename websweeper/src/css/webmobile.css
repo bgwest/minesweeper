@@ -1,5 +1,12 @@
 html {
-  zoom: 100%;
+  zoom: 80%;
+}
+
+/* Supports default zoom being slightly off on 375px displays -- mainly for iPhone 6/7/8s and X (non-plus) ... */
+@media only screen and (min-width : 370px) and  (max-width : 380px) {
+  html {
+  zoom: 75%;
+  }
 }
 
 p {
@@ -30,7 +37,7 @@ body {
 
 #gameBoard {
   float: left;
-  margin-left: 65px;
+  margin-left: 75px;
 }
 
 #resetButton {
@@ -45,7 +52,7 @@ body {
   float: left;
   margin-top: auto;
   margin-right: auto;
-  margin-left: auto;
+  margin-left: 20%;
   margin-bottom: 20px;
   position: inherit;
 }
@@ -60,7 +67,7 @@ body {
   float: left;
   margin-top: auto;
   margin-right: auto;
-  margin-left: 20px;
+  margin-left: 15px;
   margin-bottom: 20px;
   text-align: center;
   vertical-align: middle;
@@ -78,8 +85,8 @@ body {
   float: left;
   margin-top: auto;
   margin-right: auto;
-  margin-left: 20px;
-  margin-bottom: 20px;
+  margin-left: 30px;
+  margin-bottom: 10%;
   position: inherit;
 }
 
@@ -95,17 +102,16 @@ body {
 .gameover {
   float: left;
   width: 300px;
-  font-size: 60px;
+  font-size: 3em;
   text-align: center;
-  /*cmargin: auto;
-  color: #f9f9f9;*/
+  /*color: #f9f9f9;*/
   margin-top: 100px;
   color: #ae60ff7a;
   letter-spacing: -5px;
   text-shadow: 0 1px 2px rgba(0,0,0,.15), 0 -1px 1px rgba(0,0,0,.1), 0 1px 20px #F9F9F9;
 }
 
-.victory {
+h1.victory {
   color: #00c168;
   text-shadow: 0 5px 2px rgba(7, 101, 22, 0.39), 0 10px 50px rgb(75, 156, 255), 0 1px 1px #000000;
   position: fixed;
@@ -134,7 +140,6 @@ body {
   border-color: #cfb4ff*/
   border-color: #dcdcdc;
   box-shadow: 100px;
- 
   background-color: #f7fbff;
 }
 
@@ -147,7 +152,6 @@ body {
 
 .siteHeader a {
   text-decoration: none;
-  /*color: #0079ff78;*/
   color: #0079ffbf;
 }
 
@@ -155,20 +159,22 @@ body {
   float: left;
   text-align: center;
   color: #45596d78;
-  margin: 1px;
+  margin: 0px;
+  margin-top: 1px;
+  margin-bottom: 8%;
   /*font-size: 40px;*/
 }
 
 div#leaderBoard {
   margin: 0px;
-  margin-left: 10%;
-  margin-top: 3%;
-  margin-bottom: 9%;
+  margin-left: 16%;
+  margin-top: 8%;
+  margin-bottom: 10%;
 }
 
 #leaderBoard {
   color: #05202b7a;
-  width: 340px;
+  width: 320px;
   height: 500px;
   border: 2px solid #dcdcdc;
   border-radius: 20px;
@@ -190,8 +196,7 @@ div.leaderHeader {
 }
 
 .leaderHeader text {
-  /*color: #0079ffcf;*/
-  color: #0077ffb9;
+  color: #0079ffcf;
   margin: 0px;
 }
 
@@ -216,8 +221,7 @@ div#game7 {
 }
 
 #playerFormTitle {
-  font-size: 20px;
-  /*color: #2c549ad4;*/
+  font-size: 22px;
   color: #505c6b;
 }
 
@@ -229,10 +233,10 @@ div#game7 {
 
 input#playerName {
   border-radius: 8px;
-  font-size: 18px;
+  font-size: 20px;
   margin-top: 1%;
   padding-left: 8px;
-  height: 38px;
+  height: 42px;
   vertical-align: middle;
   border: 2px solid #dcdcdc;
   outline: none;
@@ -257,6 +261,7 @@ input#playerName {
 #sizeSelection .sizeSelectionText {
   color: #505c6b;
   text-align: relative;
+  margin-top: 8%;
   margin-bottom: 0px;
 }
 
@@ -286,6 +291,7 @@ div#datFooter {
   width: 95%;
   height: auto; 
   background: white;
+  margin-top: 10%;
   color: black;
   border: 3px solid #dcdcdc;
 }
@@ -307,4 +313,3 @@ div#datFooter {
   margin: 0px;
   text-decoration: none;
 }
-

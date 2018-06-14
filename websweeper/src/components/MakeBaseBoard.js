@@ -1,7 +1,7 @@
 // MakeBaseBoard.js
 
 // named export - genGuiBoard
-var genGuiBaseBoard = function(lastRow, lastCol) {
+var genGuiBaseBoard = function(lastRow, lastCol, gameBoardWidth, gameBoardHeight) {
   // make base elements and attributes
   var boardTiles = document.getElementById("board");
   var tile = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -18,8 +18,10 @@ var genGuiBaseBoard = function(lastRow, lastCol) {
   var textXcord = 6;
   var textYcord = 15;
   // board
-  tile.setAttribute("width", "1000");
-  tile.setAttribute("height", "1000");
+  tile.setAttribute("width", `${gameBoardWidth}`);
+  tile.setAttribute("height", `${gameBoardHeight}`);
+  tile.setAttribute("id", "gameBoard");
+
   boardTiles.appendChild(tile);
   // row
   for (row = 0; row < lastRow; row++) {
@@ -36,8 +38,9 @@ var genGuiBaseBoard = function(lastRow, lastCol) {
       squareElem.setAttribute("x", `${xcord}`);
       squareElem.setAttribute("y", `${ycord}`);
       squareElem.setAttribute("stroke", "black");
-      squareElem.setAttribute("stroke-opacity", "0.8");
-      squareElem.setAttribute("fill", "grey");
+      squareElem.setAttribute("stroke-width", "1");
+      squareElem.setAttribute("stroke-opacity", "0.7");
+      squareElem.setAttribute("fill", "#b1bcce");
       squareElem.setAttribute("fill-opacity", "0.5");    
       tile.appendChild(squareElem);
       // generate text elements with base style but wait to add Bombs

@@ -9,7 +9,7 @@ var scriptName = 'WebSweeper.js';
 // named imports
 import { gameParams, submitButton } from './GetGameParameters.js';
 import { genGuiBaseBoard } from './MakeBaseBoard.js';
-import { genGuiPlaceBombs, genGuiPlaceNumbers } from './SetBoard.js';
+import { genGuiPlaceBombs, genGuiPlaceNumbers, genGuiPlayerHUD, getNumberOfLegalSquares } from './SetBoard.js';
 import { playerClick } from './Gameplay.js';
 
 // wait to create game board
@@ -28,27 +28,46 @@ function checkForGameParams() {
       // if not found keep check again in a couple seconds
       setTimeout(checkForGameParams, 2000);
   } else {
-      console.log(`${scriptName} - ready - gameParams.lastCol = ${gameParams.lastCol}`);
-      // replace game selection form with a reset button for now
-      var resetButton = document.createElement("button");
-      resetButton.setAttribute("id","resetButton");
-      //resetButton.setAttribute("type","submit");
-      resetButton.setAttribute("onclick", "location.reload();");
-      resetButton.setAttribute("value","restart game");
-      resetButton.innerHTML = 'reset';
-      // for now, set reset button to refresh page... but eventually save data and offer
-      // after a page refresh
-      document.getElementsByClassName("sizeSelectionText")[0].style.display = 'none';
-      submitButton.parentNode.replaceChild(resetButton, submitButton);
+      genGuiPlayerHUD(submitButton);
+      // store playerName in localStorage
+      var playerNameVal = document.getElementById("playerName").value;
+      localStorage.setItem("playerName", playerNameVal);
+      document.getElementById("playerForm").style.display = 'none';
+
+      // ensure a blank playerName was not used
+      // this does not work on mobile very well - room for imporvement in general
+      if ( /^\s+$/.test(playerNameVal) || playerNameVal === '' ) {
+        localStorage.setItem("playerName", 'DefaultPlayer');
+      }
+
+      var makeTime = new Date();
+      var timeStarted = `${makeTime.getHours()}:${makeTime.getMinutes()}:${makeTime.getSeconds()}`;
+      var datePlayed = `${makeTime.getMonth()}/${makeTime.getDate()}/${makeTime.getFullYear()}`;
+      localStorage.setItem('timeFinished', 'TBD');
+      localStorage.setItem('datePlayed', datePlayed);
+      //hide footer
+      document.getElementById("datFooter").style.display = 'none';
+      // show legalSquaresRemaining
+      document.getElementById("legalSquaresLeft").style.display = 'grid';
       makeGame();
   }
 }
 
+
 function makeGame() {
   // if gameParams have been given let's make the game!
-  WebSweeper.MakeBaseBoard(gameParams.lastRow, gameParams.lastCol);
+  WebSweeper.MakeBaseBoard(gameParams.lastRow, gameParams.lastCol, gameParams.width, gameParams.height);
   WebSweeper.AddListeners();
   WebSweeper.SetBoard(gameParams.lastRow, gameParams.lastCol, gameParams.numOfBombs);
+  // if small board and on mobile, adjust the gameBoard selector
+  if ( gameParams.sheetType === '/css/webmobile.css' && gameParams.size === 'Small' ) {
+    document.querySelector("#gameBoard").style.marginLeft = "132px";
+    console.log(document.querySelector("#gameBoard").style.marginLeft);
+  } else if ( gameParams.sheetType === '/css/web.css' && gameParams.size === 'Small' ) {
+      document.querySelector("#gameBoard").style.marginLeft = "120px";
+      console.log(document.querySelector("#gameBoard").style.marginLeft);
+  }
+  getNumberOfLegalSquares();
 }
 
 // Game Builder and click handler!
@@ -59,13 +78,11 @@ class WebSweeper {
       this._numOfBombs = numOfBombs;
   }
   
-  static MakeBaseBoard(x, y) {
-    console.log('called MakeBaseBoard');
-    genGuiBaseBoard(x, y);
+  static MakeBaseBoard(x, y, xy, zy) {
+    genGuiBaseBoard(x, y, xy, zy);
   }
 
   static AddListeners() {
-    console.log('called AddListeners');
     var gameSquares = document.getElementsByClassName("game-squares");
     var textSquares = document.getElementsByClassName("text-squares");
     // event listeners for newly generated board squares
@@ -75,17 +92,19 @@ class WebSweeper {
       textSquares[i].addEventListener("click", function() { 
         WebSweeper.GamePlay(textSquares[i]) }, false);
     }
-    //console.log('Number of boardSquares= ' + gameSquares.length);
   }
 
   static SetBoard(x, y, z) {
-    console.log('called SetBoard');
     genGuiPlaceBombs(x, y, z);
     genGuiPlaceNumbers(x, y);
   }
 
   static GamePlay(e) {
-    playerClick(e, gameParams);
+    if (gameParams.gameState === "inplay") {
+      gameParams.gameState = playerClick(e, gameParams);
+    } else {
+        alert('Click reset to play a new game.');
+    }
   }
 
 }
